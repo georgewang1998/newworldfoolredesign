@@ -1,0 +1,214 @@
+---
+const projects = [
+  {
+    index: "01",
+    title: "Piggy",
+    year: "2025",
+    category: "Short Film",
+    description: "After bombing yet another open mic, a struggling obese comedian takes drastic measures to obtain the validation he’s always craved.",
+    image: "/FilmScreengrabs/Piggy_still.png",
+  },
+  {
+    index: "02",
+    title: "Mukbang'd",
+    year: "2025",
+    category: "Short Film",
+    description: "A mukbang influencer begins to film another day of her scarfing and spitting out piles of food. Until a mysterious accident causes things to spiral out of control…",
+    image: "/FilmScreengrabs/Mukbang_still.png",
+  },
+  {
+    index: "03",
+    title: "Unforeseen",
+    year: "2025",
+    category: "Short Film",
+    description: "An ambitious film crew shoots a horror film in what they think is an abandoned warehouse. But as the crew splinters, an unforeseen entity comes to visit.",
+    image: "/FilmScreengrabs/Unforeseen_still.png",
+  },
+  {
+    index: "04",
+    title: "The Hunter",
+    year: "2024",
+    category: "Short Film",
+    description: "An arrogant hunter heads into the woods for what he thinks is a typical day of sport. But things change when it turns out he is the one being hunted…",
+    image: "/FilmScreengrabs/Hunter_still.png",
+  },
+];
+---
+
+<section class="accordion">
+  {projects.map((p) => (
+    <article class="project">
+      <img src={p.image} alt={p.title} class="bg" />
+      <div class="overlay" />
+
+      <!-- Shown when collapsed -->
+      <div class="collapsed-info">
+        <span class="rotated-label"><span class="rotated-title">{p.title}</span>&ensp;<span class="rotated-year">{p.year}</span></span>
+      </div>
+
+      <!-- Shown when expanded -->
+      <div class="expanded-info">
+        <span class="index">{p.index}</span>
+        <div class="details">
+          <span class="meta">{p.year}&nbsp;·&nbsp;{p.category}</span>
+          <h2 class="title">{p.title}</h2>
+          <p class="description">{p.description}</p>
+        </div>
+      </div>
+    </article>
+  ))}
+</section>
+
+<style>
+  .accordion {
+    display: flex;
+    height: calc(100svh - 3.5rem);
+    gap: 2px;
+    scroll-snap-align: start;
+  }
+
+  /* --- Panel sizing --- */
+  .project {
+    position: relative;
+    flex: 0.4;
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* First panel expanded by default */
+  .project:first-child {
+    flex: 4;
+  }
+
+  /* When accordion is hovered, collapse first panel unless it's being hovered */
+  .accordion:hover .project:first-child {
+    flex: 0.4;
+  }
+
+  .accordion:hover .project:hover {
+    flex: 4;
+  }
+
+  /* --- Background --- */
+  .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project:hover .bg {
+    transform: scale(1.04);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.15) 100%);
+  }
+
+  /* --- Collapsed info (rotated title + year) --- */
+  .collapsed-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .rotated-label {
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: "Bebas Neue", sans-serif;
+  }
+
+  .rotated-title {
+    font-size: 4.2rem;
+  }
+
+  .rotated-year {
+    font-size: 1.05rem;
+  }
+
+  /* --- Expanded info --- */
+  .expanded-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .index {
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.08em;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .meta {
+    font-family: "DM Mono", monospace;
+    font-size: 0.975rem;
+    color: #C8A96E;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: translateY(6px);
+    transition: transform 0.3s ease 0.1s;
+  }
+
+  .title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(6rem, 9vw, 10.5rem);
+    font-weight: 400;
+    color: #F0ECE0;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .description {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.08rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-width: 55ch;
+    transform: translateY(8px);
+    transition: transform 0.3s ease 0.15s;
+  }
+
+  /* --- Expanded state --- */
+  /* First child expanded by default */
+  .project:first-child .collapsed-info { opacity: 0; }
+  .project:first-child .expanded-info  { opacity: 1; }
+
+  /* When accordion is hovered, revert first child */
+  .accordion:hover .project:first-child .collapsed-info { opacity: 1; }
+  .accordion:hover .project:first-child .expanded-info  { opacity: 0; }
+
+  /* Hovered panel gets expanded state */
+  .accordion:hover .project:hover .collapsed-info { opacity: 0; }
+  .accordion:hover .project:hover .expanded-info  { opacity: 1; }
+
+  .accordion:hover .project:hover .meta,
+  .accordion:hover .project:hover .description,
+  .project:first-child .meta,
+  .project:first-child .description {
+    transform: translateY(0);
+  }
+</style>

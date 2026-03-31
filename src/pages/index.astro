@@ -1,0 +1,347 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProjectAccordion from "../components/ProjectAccordion.astro";
+---
+
+<Layout title="New World Fool">
+  <ProjectAccordion />
+  <div class="jester-panel">
+  <div class="jester-video-bg">
+    <iframe
+      src="https://player.vimeo.com/video/1165271851?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      title=""
+    ></iframe>
+    <div class="jester-video-overlay"></div>
+  </div>
+  <section class="tagline">
+    <div class="tagline-top">
+      <h2>
+        <span>The Court</span>
+        <span class="gold">Jester</span>
+        <span>Speaks.</span>
+      </h2>
+      <a href="/work" class="work-link">
+        <span class="work-label">Our Work &rsaquo;</span>
+      </a>
+    </div>
+    <p>Black comedy. Horror. The truth no one else will tell.</p>
+  </section>
+
+  <div class="laurels-ticker">
+    <div class="laurels-track">
+      {(() => {
+        const laurels = [
+          { src: "/laurels/ArizonaIntl.png", alt: "Arizona International Film Festival — Official Selection", invert: false },
+          { src: "/laurels/BigAppleWhiteLaurels-scaled.png", alt: "Big Apple Film Festival — Official Selection", invert: false },
+          { src: "/laurels/CYIFF_laurel_black__OFFICIAL_SELECTION-transparent.png", alt: "CYIFF — Official Selection", invert: false },
+          { src: "/laurels/NJ4thWallFilmFestivalLaurelsWhiteNoBackground.png", alt: "NJ 4th Wall Film Festival — Official Selection", invert: false },
+          { src: "/laurels/Official-Selection-White.png", alt: "Official Selection", invert: false },
+        ];
+        const doubled = [...laurels, ...laurels, ...laurels, ...laurels];
+        return doubled.map(({ src, alt, invert }) => (
+          <img
+            src={src}
+            alt={alt}
+            class={`laurel-img${invert ? " invert" : ""}`}
+          />
+        ));
+      })()}
+    </div>
+  </div>
+  </div>
+
+  <div class="ethos-bts-panel">
+    <section class="ethos">
+      <div class="ethos-left">
+        <span>&lt;our ethos&gt;</span>
+      </div>
+      <div class="ethos-right">
+        <p>We live in a world drenched in arrogance, greed, and corruption. The court jester was the only one permitted to speak truth to power. We carry that tradition into cinema.</p>
+        <a href="/about" class="ethos-link">Learn our story &rsaquo;</a>
+      </div>
+    </section>
+
+    <section class="bts">
+      <div class="bts-rows">
+        {(() => {
+          const photos = [
+            "/BTS/IMG_5447 1.png",
+            "/BTS/IMG_5430 1.png",
+            "/BTS/IMG_5452 1(1).png",
+            "/BTS/shortfilm-05184 1.png",
+            "/BTS/IMG_3725 1.png",
+            "/BTS/IMG_5442 1.png",
+          ];
+          const row1 = [...photos, ...photos, ...photos, ...photos];
+          const row2 = [...[...photos].reverse(), ...[...photos].reverse(), ...[...photos].reverse(), ...[...photos].reverse()];
+          return (
+            <>
+              <div class="bts-row bts-row--left">
+                {row1.map((src, i) => (
+                  <img src={src} alt="" class="bts-photo" />
+                ))}
+              </div>
+              <div class="bts-row bts-row--right">
+                {row2.map((src, i) => (
+                  <img src={src} alt="" class="bts-photo" />
+                ))}
+              </div>
+            </>
+          );
+        })()}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .jester-panel {
+    position: relative;
+    height: calc(100svh - 3.5rem);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top: 1px solid #1a1a18;
+    overflow: hidden;
+  }
+
+  .jester-video-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .jester-video-bg iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 177.78vh; /* 16/9 ratio */
+    height: 100%;
+    min-width: 100%;
+    min-height: 56.25vw; /* 9/16 ratio */
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .jester-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  .tagline,
+  .laurels-ticker {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tagline {
+    padding: 5rem 2.5rem;
+  }
+
+  .tagline-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .work-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #C8A96E;
+    transition: opacity 0.2s;
+    margin-right: 3rem;
+  }
+
+  .work-link:hover {
+    opacity: 0.7;
+  }
+
+  .work-label {
+    font-family: "DM Mono", monospace;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tagline h2 .gold {
+    color: #C8A96E;
+  }
+
+  .tagline h2 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(5rem, 18vw, 18rem);
+    line-height: 0.85;
+    font-weight: 400;
+    color: #F0ECE0;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .laurels-ticker {
+    overflow: hidden;
+    padding: 2rem 0;
+  }
+
+  .laurels-track {
+    display: inline-flex;
+    align-items: center;
+    animation: ticker 30s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-25%); }
+  }
+
+  .laurel-img {
+    height: 9rem;
+    width: auto;
+    object-fit: contain;
+    padding: 0 3rem;
+    opacity: 0.75;
+    flex-shrink: 0;
+  }
+
+  .laurel-img.invert {
+    filter: invert(1);
+  }
+
+  .ethos-bts-panel {
+    height: calc(100svh - 3.5rem);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #1a1a18;
+    overflow: hidden;
+  }
+
+  .ethos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-content: center;
+    flex: 1;
+    padding: 3rem 2.5rem;
+  }
+
+  .ethos-left {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .ethos-left span {
+    font-family: "DM Mono", monospace;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    color: #F0ECE0;
+    text-transform: lowercase;
+  }
+
+  .ethos-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: "DM Mono", monospace;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C8A96E;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .ethos-link:hover {
+    opacity: 0.7;
+  }
+
+  .ethos-right p {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.2rem, 2vw, 1.75rem);
+    font-weight: 300;
+    color: #F0ECE0;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  .tagline p {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: #C8A96E;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .bts {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    overflow: hidden;
+    padding: 2rem 0;
+  }
+
+  .bts-label {
+    padding: 0 2.5rem;
+  }
+
+  .bts-label span {
+    font-family: "DM Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #F0ECE040;
+    text-transform: lowercase;
+  }
+
+  .bts-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .bts-row {
+    display: flex;
+    gap: 1rem;
+    height: 14rem;
+    will-change: transform;
+  }
+
+  .bts-row--left {
+    animation: scroll-left 30s linear infinite;
+  }
+
+  .bts-row--right {
+    animation: scroll-right 30s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @keyframes scroll-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  .bts-photo {
+    flex-shrink: 0;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+</style>
