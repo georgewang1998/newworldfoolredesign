@@ -4,16 +4,16 @@ import Footer from "../components/Footer.astro";
 
 interface Props {
   title?: string;
+  noSnap?: boolean;
 }
 
-const { title = "New World Fool" } = Astro.props;
+const { title = "New World Fool Productions", noSnap = false } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" class={noSnap ? "no-snap" : ""}>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -41,6 +41,10 @@ const { title = "New World Fool" } = Astro.props;
     font-family: system-ui, -apple-system, sans-serif;
     scroll-snap-type: y mandatory;
     scroll-padding-top: 3.5rem;
+  }
+
+  html.no-snap {
+    scroll-snap-type: none;
   }
 
   body {

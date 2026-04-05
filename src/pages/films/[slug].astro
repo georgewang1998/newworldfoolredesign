@@ -1,0 +1,435 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { films, getFilmBySlug } from "../../data/films";
+
+export function getStaticPaths() {
+  return films.map((film) => ({
+    params: { slug: film.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const film = getFilmBySlug(slug);
+
+if (!film) return Astro.redirect("/work");
+---
+
+<Layout title={`${film.title} — New World Fool Productions`} noSnap>
+  <article class="film-page">
+
+    <!-- Hero -->
+    <section class="film-hero">
+      <div class="hero-inner">
+        {film.poster ? (
+          <div class="poster-wrap">
+            <img src={film.poster} alt={`${film.title} poster`} class="poster" />
+          </div>
+        ) : (
+          <div class="poster-wrap poster-placeholder">
+            <img src={film.stillImage} alt={film.title} class="poster" style="object-position: center top;" />
+          </div>
+        )}
+
+        <div class="film-info">
+          <div class="film-meta">
+            <span class="film-year">{film.year}</span>
+            <span class="meta-sep" aria-hidden="true">·</span>
+            <span class="film-category">{film.category}</span>
+          </div>
+
+          <h1 class="film-title">{film.title}</h1>
+          <p class="film-tagline">{film.tagline}</p>
+
+          <span class={`status-badge status-${film.status}`}>{film.statusLabel}</span>
+
+          <div class="film-credits">
+            {film.credits.map((credit) => (
+              <div class="credit-row">
+                <span class="credit-role">{credit.role}</span>
+                <span class="credit-name">{credit.name}</span>
+              </div>
+            ))}
+          </div>
+
+          <div class="film-actions">
+            {film.imdbUrl && (
+              <a href={film.imdbUrl} target="_blank" rel="noopener noreferrer" class="btn-imdb">
+                View on IMDb
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            )}
+            <a href="/work" class="btn-back">← All Films</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stills Gallery -->
+    {film.stills.length > 0 && (
+      <section class="gallery-section">
+        <div class="stills-grid">
+          {film.stills.map((src, i) => (
+            <div class="still-item" data-index={i}>
+              <img src={src} alt={`${film.title} still ${i + 1}`} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Festival Laurels -->
+    {film.laurels.length > 0 && (
+      <section class="laurels-section">
+        <div class="laurels-row">
+          {film.laurels.map((laurel) => (
+            <div class="laurel-item">
+              <img src={laurel.src} alt={laurel.alt} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+  </article>
+</Layout>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <img src="" alt="" id="lightbox-img" />
+</div>
+
+<script>
+  const stills = document.querySelectorAll<HTMLElement>(".still-item");
+  const lightbox = document.getElementById("lightbox")!;
+  const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement;
+  const lightboxClose = document.getElementById("lightbox-close")!;
+
+  stills.forEach((item) => {
+    item.addEventListener("click", () => {
+      const img = item.querySelector("img")!;
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+</script>
+
+<style>
+  .film-page {
+    min-height: 100vh;
+  }
+
+  /* ── Hero ── */
+  .film-hero {
+    padding: 4rem 2.5rem 5rem;
+    border-bottom: 1px solid #1a1a18;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .poster-wrap {
+    position: sticky;
+    top: calc(3.5rem + 2rem);
+  }
+
+  .poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  }
+
+  .film-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .film-year,
+  .film-category,
+  .meta-sep {
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(240, 236, 224, 0.4);
+  }
+
+  .film-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 400;
+    line-height: 0.9;
+    color: #F0ECE0;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.25rem;
+  }
+
+  .film-tagline {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(240, 236, 224, 0.65);
+    margin-bottom: 1.5rem;
+    max-width: 480px;
+  }
+
+  .status-badge {
+    display: inline-block;
+    font-family: "DM Mono", monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+
+  .status-festival {
+    background: rgba(200, 169, 110, 0.15);
+    color: #C8A96E;
+    border: 1px solid rgba(200, 169, 110, 0.35);
+  }
+
+  .status-post-production {
+    background: rgba(240, 236, 224, 0.08);
+    color: rgba(240, 236, 224, 0.6);
+    border: 1px solid rgba(240, 236, 224, 0.18);
+  }
+
+  .status-pre-production {
+    background: rgba(240, 236, 224, 0.05);
+    color: rgba(240, 236, 224, 0.4);
+    border: 1px solid rgba(240, 236, 224, 0.12);
+  }
+
+  .film-credits {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #1a1a18;
+  }
+
+  .credit-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: baseline;
+  }
+
+  .credit-role {
+    font-family: "DM Mono", monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(240, 236, 224, 0.35);
+    min-width: 90px;
+    flex-shrink: 0;
+  }
+
+  .credit-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(240, 236, 224, 0.8);
+  }
+
+  .film-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-imdb {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #C8A96E;
+    text-decoration: none;
+    border: 1px solid rgba(200, 169, 110, 0.4);
+    padding: 0.6rem 1.2rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .btn-imdb:hover {
+    background: rgba(200, 169, 110, 0.1);
+    border-color: #C8A96E;
+  }
+
+  .btn-back {
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(240, 236, 224, 0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .btn-back:hover {
+    color: #F0ECE0;
+  }
+
+  /* ── Gallery ── */
+  .gallery-section {
+    padding: 5rem 2.5rem;
+    border-bottom: 1px solid #1a1a18;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .stills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .still-item {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    cursor: pointer;
+    background: #0A0A08;
+  }
+
+  .still-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s;
+    filter: brightness(0.85);
+  }
+
+  .still-item:hover img {
+    transform: scale(1.05);
+    filter: brightness(1);
+  }
+
+  /* ── Laurels ── */
+  .laurels-section {
+    padding: 5rem 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .laurels-row {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .laurel-item img {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    filter: brightness(0) invert(1);
+  }
+
+  .laurel-item img:hover {
+    opacity: 1;
+  }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.open { display: flex; }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: rgba(240, 236, 224, 0.6);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .lightbox-close:hover { color: #F0ECE0; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .poster-wrap {
+      position: static;
+      max-width: 280px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .stills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .film-hero,
+    .gallery-section,
+    .laurels-section {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .stills-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .laurels-row { gap: 2rem; }
+    .laurel-item img { height: 80px; }
+  }
+</style>

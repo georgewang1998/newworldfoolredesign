@@ -26,7 +26,9 @@ const socials = [
 
 <footer>
   <div class="footer-top">
-    <a href="/" class="footer-logo">New World Fool</a>
+    <a href="/" class="footer-logo">
+      <img src="/logo.png" alt="New World Fool Productions" class="footer-logo-img" />
+    </a>
     <nav class="footer-nav">
       {links.map(({ label, href }) => (
         <a href={href}>{label}</a>
@@ -40,8 +42,7 @@ const socials = [
   </div>
 
   <div class="footer-bottom">
-    <span class="footer-tagline">Black comedy. Horror. The truth no one else will tell.</span>
-    <span class="footer-copy">&copy; {new Date().getFullYear()} New World Fool. All rights reserved.</span>
+    <span class="footer-copy">&copy; {new Date().getFullYear()} New World Fool Productions. All rights reserved.</span>
   </div>
 </footer>
 
@@ -63,19 +64,21 @@ const socials = [
   }
 
   .footer-logo {
-    font-family: "DM Mono", monospace;
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #F0ECE0;
     text-decoration: none;
+    display: flex;
+    align-items: center;
     transition: opacity 0.2s;
     line-height: 1;
   }
 
   .footer-logo:hover {
     opacity: 0.6;
+  }
+
+  .footer-logo-img {
+    height: 5rem;
+    width: auto;
+    display: block;
   }
 
   .footer-nav {

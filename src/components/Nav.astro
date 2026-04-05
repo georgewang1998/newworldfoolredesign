@@ -28,7 +28,9 @@ const currentPath = Astro.url.pathname;
 
 <header>
   <nav>
-    <a href="/" class="logo">New World Fool</a>
+    <a href="/" class="logo">
+      <img src="/logo.png" alt="New World Fool Productions" class="logo-img" />
+    </a>
     <ul>
       {links.map(({ label, href }) => (
         <li>
@@ -59,24 +61,26 @@ const currentPath = Astro.url.pathname;
     align-items: center;
     justify-content: space-between;
     background: #0A0A08;
-    padding: 1.25rem 2.5rem;
+    padding: 0.2rem 2.5rem 0.2rem 0.2rem;
     border-bottom: 1px solid #1a1a18;
   }
 
   .logo {
-    font-family: "DM Mono", monospace;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #F0ECE0;
     text-decoration: none;
+    display: flex;
+    align-items: center;
     transition: opacity 0.2s;
     line-height: 1;
   }
 
   .logo:hover {
     opacity: 0.6;
+  }
+
+  .logo-img {
+    height: 3.1rem;
+    width: auto;
+    display: block;
   }
 
   ul {
@@ -121,5 +125,23 @@ const currentPath = Astro.url.pathname;
     width: 1px;
     height: 0.9rem;
     background: #F0ECE040;
+  }
+
+  @media (max-width: 640px) {
+    nav {
+      padding: 0.2rem 1rem 0.2rem 0.2rem;
+    }
+
+    .logo-img {
+      height: 2.5rem;
+    }
+
+    ul {
+      gap: 1rem;
+    }
+
+    ul a {
+      font-size: 0.65rem;
+    }
   }
 </style>
