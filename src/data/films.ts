@@ -26,6 +26,7 @@ export interface Film {
   runtime?: string;
   genre?: string;
   videoEmbedUrl?: string;
+  watchUrl?: string;
 }
 
 export const films: Film[] = [
@@ -95,6 +96,7 @@ export const films: Film[] = [
     genre: "Horror",
     statusLabel: undefined,
     videoEmbedUrl: "https://player.vimeo.com/video/1194892213?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0&dnt=1",
+    watchUrl: "https://youtu.be/6kpKpttnuvw",
     imdbUrl: "https://www.imdb.com/title/tt35234763/",
     poster: "/films/placeholder/mukbangd.png",
     stillImage: "/FilmScreengrabs/Mukbang_still.png",

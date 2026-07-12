@@ -199,6 +199,7 @@ const upcoming  = indexed.filter(({ film }) => film.status !== 'completed');
       imdbUrl: f.imdbUrl ?? null,
       credits: f.credits,
       videoEmbedUrl: f.videoEmbedUrl ?? null,
+      watchUrl: f.watchUrl ?? null,
     })))}></div>
 
   </div>
@@ -1007,7 +1008,7 @@ const upcoming  = indexed.filter(({ film }) => film.status !== 'completed');
     statusLabel: string; status: string; genre: string | null; runtime: string | null; poster: string;
     stills: string[]; laurels: { src: string; alt: string }[];
     imdbUrl: string | null; credits: { role: string; name: string }[];
-    videoEmbedUrl: string | null;
+    videoEmbedUrl: string | null; watchUrl: string | null;
   }[] = JSON.parse(
     (document.getElementById('films-data') as HTMLElement)?.dataset.films ?? '[]'
   );
@@ -1058,7 +1059,7 @@ const upcoming  = indexed.filter(({ film }) => film.status !== 'completed');
       if (badge) { badge.textContent = ''; badge.style.display = 'none'; }
       if (btnWatch) {
         const videoId = f.videoEmbedUrl?.match(/\/video\/(\d+)/)?.[1];
-        btnWatch.href = videoId ? `https://vimeo.com/${videoId}` : (f.imdbUrl ?? '#');
+        btnWatch.href = f.watchUrl ?? (videoId ? `https://vimeo.com/${videoId}` : (f.imdbUrl ?? '#'));
         btnWatch.style.display = 'inline-flex';
       }
     } else {
